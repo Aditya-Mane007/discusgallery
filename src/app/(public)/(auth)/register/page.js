@@ -1,7 +1,8 @@
 import React from "react";
+import RegisterForm from "@/views/auth/RegisterForm";
 
 function Register() {
-  return <div>Register Page</div>;
+  return <RegisterForm />;
 }
 
 export default Register;

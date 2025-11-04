@@ -6,17 +6,30 @@ import axios from "axios";
 //   },
 // };
 
-const login = async (FormData) => {
+const login = async (formData) => {
   const res = await axios.post(
     process.env.NEXT_PUBLIC_API_URL + "/auth/login",
-    FormData
+    formData,
+    {
+      withCredentials: true,
+    }
   );
-
-  await new Promise((resolve) => setTimeout(resolve, 5000)); // simulate delay
 
   return res.data;
 };
 
-const authService = { login };
+const register = async (formData) => {
+  const res = await axios.post(
+    process.env.NEXT_PUBLIC_API_URL + "/auth/register",
+    formData,
+    {
+      withCredentials: true,
+    }
+  );
+
+  return res.data;
+};
+
+const authService = { login, register };
 
 export default authService;

@@ -7,21 +7,45 @@ const initialState = {
   isError: false,
   isLoading: false,
   message: "",
+  validation_message: [],
 };
 
 export const login = createAsyncThunk(
   "auth/login",
-  async (FormData, thunkAPI) => {
+  async (formData, thunkAPI) => {
     try {
-      return await authService.login(FormData);
+      return await authService.login(formData);
     } catch (error) {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
+        (error?.response &&
+          error?.response?.data &&
+          error?.response?.data?.message) ||
+        error?.message ||
         error.toString();
 
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const register = createAsyncThunk(
+  "auth/register",
+  async (formData, thunkAPI) => {
+    try {
+      return await authService.register(formData);
+    } catch (error) {
+      let message;
+
+      if (Array.isArray(error?.response?.data?.validation_message)) {
+        message = error?.response?.data?.validation_message.join(", ");
+      } else {
+        message =
+          (error?.response &&
+            error?.response?.data &&
+            error?.response?.data?.message) ||
+          error?.message ||
+          error.toString();
+      }
       return thunkAPI.rejectWithValue(message);
     }
   }
@@ -46,9 +70,23 @@ const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.message = action.payload;
+        state.message = action.payload.message;
       })
       .addCase(login.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(register.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(register.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.message = action.payload.message;
+      })
+      .addCase(register.rejected, (state, action) => {
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;

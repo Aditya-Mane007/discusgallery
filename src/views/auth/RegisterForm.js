@@ -32,11 +32,20 @@ import { EyeClosedIcon, EyeIcon, Loader } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
-import { login, reset } from "@/lib/features/auth/authSlice";
+import { register, reset } from "@/lib/features/auth/authSlice";
 import toast from "react-hot-toast";
 import Loading from "@/app/(public)/(auth)/loading";
 
 const formSchema = z.object({
+  name: z
+    .string()
+    .nonempty({ message: "Full name cannot be empty" })
+    .min(2, {
+      message: "Full name must be at least 2 characters long",
+    })
+    .max(100, {
+      message: "Full name must be at most 100 characters",
+    }),
   email: z
     .string()
     .nonempty({ message: "Email address cannot be empty" })
@@ -52,7 +61,7 @@ const formSchema = z.object({
     ),
 });
 
-function LoginForm() {
+function RegisterForm() {
   const dispatch = useDispatch();
   const { isSuccess, isLoading, isError, message } = useSelector(
     (state) => state.auth
@@ -62,38 +71,36 @@ function LoginForm() {
     resolver: zodResolver(formSchema),
     mode: "onChange",
     defaultValues: {
+      name: "",
       email: "",
       password: "",
     },
   });
 
   function onSubmit(values) {
-    dispatch(login(values));
+    dispatch(register(values));
   }
 
   useEffect(() => {
     if (isError) {
       toast.error(
-        message || "Error : Unbale to login, please try after somethime"
+        message || "Error : Unbale to register, please try after sometime"
       );
     }
-
     if (isSuccess) {
-      toast.success(message || "Success : Login Succesfull");
+      toast.success(message || "Success : Registered Succesfully");
     }
-
     return () => {
       dispatch(reset());
     };
   }, [isSuccess, isError, message]);
-
   return (
     <>
       <div className="w-full h-screen flex justify-center items-center">
         <Card className="w-full max-w-md">
           <CardHeader>
             <CardTitle className="text-[1.25rem]">
-              Login to Discus Gallery
+              Join Discus Gallery Today!
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -102,6 +109,19 @@ function LoginForm() {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="space-y-8"
               >
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Full Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="e.g Harry Potter " {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   control={form.control}
                   name="email"
@@ -164,15 +184,15 @@ function LoginForm() {
                   className="w-full cursor-pointer "
                   disabled={isLoading}
                 >
-                  {isLoading ? <Loader className="animate-spin" /> : "Login"}
+                  {isLoading ? <Loader className="animate-spin" /> : "Register"}
                 </Button>
               </form>
             </Form>
           </CardContent>
           <CardFooter className="text-[.875rem]">
-            New here ?{" "}
-            <Link href="/register" className="ml-2 underline">
-              Create your account here
+            Already hava an account ?{" "}
+            <Link href="/login" className="ml-2 underline">
+              login to your account
             </Link>
           </CardFooter>
         </Card>
@@ -181,4 +201,4 @@ function LoginForm() {
   );
 }
 
-export default LoginForm;
+export default RegisterForm;
