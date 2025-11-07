@@ -8,7 +8,6 @@ import axios from "axios";
 // };
 
 const login = async (formData) => {
-  console.log(formData);
   const encryptedData = {
     request: encryptPayload(JSON.stringify(formData)),
   };
