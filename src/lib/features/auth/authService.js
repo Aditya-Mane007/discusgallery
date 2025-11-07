@@ -1,3 +1,4 @@
+import { encryptPayload, handleAPICall } from "@/lib/utils";
 import axios from "axios";
 
 // const config = {
@@ -7,15 +8,24 @@ import axios from "axios";
 // };
 
 const login = async (formData) => {
-  const res = await axios.post(
-    process.env.NEXT_PUBLIC_API_URL + "/auth/login",
-    formData,
-    {
-      withCredentials: true,
-    }
-  );
+  console.log(formData);
+  const encryptedData = {
+    request: encryptPayload(JSON.stringify(formData)),
+  };
 
-  return res.data;
+  const result = await handleAPICall(async () => {
+    const res = await axios.post(
+      process.env.NEXT_PUBLIC_API_URL + "/auth/login",
+      encryptedData,
+      {
+        withCredentials: true,
+      }
+    );
+
+    return res?.data;
+  });
+
+  return result;
 };
 
 const register = async (formData) => {
@@ -26,7 +36,6 @@ const register = async (formData) => {
       withCredentials: true,
     }
   );
-
   return res.data;
 };
 

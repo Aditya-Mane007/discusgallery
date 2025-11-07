@@ -29,7 +29,7 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 import { EyeClosedIcon, EyeIcon, Loader } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, decryptPayload, encryptPayload } from "@/lib/utils";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { login, reset } from "@/lib/features/auth/authSlice";
@@ -170,8 +170,8 @@ function LoginForm() {
             </Form>
           </CardContent>
           <CardFooter className="text-[.875rem]">
-            New here ?{" "}
-            <Link href="/register" className="ml-2 underline">
+            New here ?
+            <Link href="/register" className="ml-1 underline">
               Create your account here
             </Link>
           </CardFooter>
