@@ -35,6 +35,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { login, reset } from "@/lib/features/auth/authSlice";
 import toast from "react-hot-toast";
 import Loading from "@/app/(public)/(auth)/loading";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   email: z
@@ -54,6 +55,7 @@ const formSchema = z.object({
 
 function LoginForm() {
   const dispatch = useDispatch();
+  const router = useRouter();
   const { isSuccess, isLoading, isError, message } = useSelector(
     (state) => state.auth
   );
@@ -80,6 +82,7 @@ function LoginForm() {
 
     if (isSuccess) {
       toast.success(message || "Success : Login Succesfull");
+      router.push("/");
     }
 
     return () => {
@@ -90,7 +93,7 @@ function LoginForm() {
   return (
     <>
       <div className="w-full h-screen flex justify-center items-center">
-        <Card className="w-full max-w-md">
+        <Card className="w-full max-w-[90%] sm:max-w-md">
           <CardHeader>
             <CardTitle className="text-[1.25rem]">
               Login to Discus Gallery

@@ -28,14 +28,21 @@ const login = async (formData) => {
 };
 
 const register = async (formData) => {
-  const res = await axios.post(
-    process.env.NEXT_PUBLIC_API_URL + "/auth/register",
-    formData,
-    {
-      withCredentials: true,
-    }
-  );
-  return res.data;
+  const encryptedData = {
+    request: encryptPayload(JSON.stringify(formData)),
+  };
+
+  const result = await handleAPICall(async () => {
+    const res = await axios.post(
+      process.env.NEXT_PUBLIC_API_URL + "/auth/register",
+      encryptedData,
+      {
+        withCredentials: true,
+      }
+    );
+    return res.data;
+  });
+  return result;
 };
 
 const authService = { login, register };

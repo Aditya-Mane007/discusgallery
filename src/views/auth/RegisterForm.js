@@ -35,6 +35,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { register, reset } from "@/lib/features/auth/authSlice";
 import toast from "react-hot-toast";
 import Loading from "@/app/(public)/(auth)/loading";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   name: z
@@ -62,6 +63,7 @@ const formSchema = z.object({
 });
 
 function RegisterForm() {
+  const router = useRouter();
   const dispatch = useDispatch();
   const { isSuccess, isLoading, isError, message } = useSelector(
     (state) => state.auth
@@ -89,6 +91,7 @@ function RegisterForm() {
     }
     if (isSuccess) {
       toast.success(message || "Success : Registered Succesfully");
+      router.push("/");
     }
     return () => {
       dispatch(reset());
@@ -97,7 +100,7 @@ function RegisterForm() {
   return (
     <>
       <div className="w-full h-screen flex justify-center items-center">
-        <Card className="w-full max-w-md">
+        <Card className="w-full max-w-[90%] sm:max-w-md">
           <CardHeader>
             <CardTitle className="text-[1.25rem]">
               Join Discus Gallery Today!
