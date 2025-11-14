@@ -76,7 +76,7 @@ function LoginForm() {
   useEffect(() => {
     if (isError) {
       toast.error(
-        message || "Error : Unbale to login, please try after somethime"
+        message || "Error : Unbale to login, please try after sometime"
       );
     }
 

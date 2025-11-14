@@ -8,41 +8,27 @@ import axios from "axios";
 // };
 
 const login = async (formData) => {
-  const encryptedData = {
-    request: encryptPayload(JSON.stringify(formData)),
-  };
+  const res = await axios.post(
+    process.env.NEXT_PUBLIC_API_URL + "/auth/login",
+    formData,
+    {
+      withCredentials: true,
+    }
+  );
 
-  const result = await handleAPICall(async () => {
-    const res = await axios.post(
-      process.env.NEXT_PUBLIC_API_URL + "/auth/login",
-      encryptedData,
-      {
-        withCredentials: true,
-      }
-    );
-
-    return res?.data;
-  });
-
-  return result;
+  return res;
 };
 
 const register = async (formData) => {
-  const encryptedData = {
-    request: encryptPayload(JSON.stringify(formData)),
-  };
+  const res = await axios.post(
+    process.env.NEXT_PUBLIC_API_URL + "/auth/register",
+    formData,
+    {
+      withCredentials: true,
+    }
+  );
 
-  const result = await handleAPICall(async () => {
-    const res = await axios.post(
-      process.env.NEXT_PUBLIC_API_URL + "/auth/register",
-      encryptedData,
-      {
-        withCredentials: true,
-      }
-    );
-    return res.data;
-  });
-  return result;
+  return res;
 };
 
 const authService = { login, register };

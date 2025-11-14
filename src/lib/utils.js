@@ -20,10 +20,20 @@ export const decryptPayload = (payload) => {
   ).toString(CryptoJS.enc.Utf8);
 };
 
-export const handleAPICall = async (callback) => {
-  const res = await callback();
+export const handleAPICall = async (formData, callback, thunkAPI) => {
+  try {
+    const encryptedData = {
+      request: encryptPayload(JSON.stringify(formData)),
+    };
+    const res = await callback(encryptedData);
+    const decryptedData = decryptPayload(res?.data?.response);
+    return JSON.parse(decryptedData);
+  } catch (error) {
+    const errorData = JSON.parse(
+      decryptPayload(error?.response?.data?.response)
+    );
+    const message = errorData?.message || errorData.toString();
 
-  const decryptedData = decryptPayload(res?.response);
-
-  return JSON.parse(decryptedData);
+    return thunkAPI.rejectWithValue(message);
+  }
 };

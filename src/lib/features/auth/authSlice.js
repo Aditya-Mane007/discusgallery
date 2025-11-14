@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import authService from "./authService";
+import { decryptPayload, handleAPICall } from "@/lib/utils";
 
 const initialState = {
   user: "",
@@ -13,41 +14,14 @@ const initialState = {
 export const login = createAsyncThunk(
   "auth/login",
   async (formData, thunkAPI) => {
-    try {
-      return await authService.login(formData);
-    } catch (error) {
-      const message =
-        (error?.response &&
-          error?.response?.data &&
-          error?.response?.data?.message) ||
-        error?.message ||
-        error.toString();
-
-      return thunkAPI.rejectWithValue(message);
-    }
+    return await handleAPICall(formData, authService.login, thunkAPI);
   }
 );
 
 export const register = createAsyncThunk(
   "auth/register",
   async (formData, thunkAPI) => {
-    try {
-      return await authService.register(formData);
-    } catch (error) {
-      let message;
-
-      if (Array.isArray(error?.response?.data?.validation_message)) {
-        message = error?.response?.data?.validation_message.join(", ");
-      } else {
-        message =
-          (error?.response &&
-            error?.response?.data &&
-            error?.response?.data?.message) ||
-          error?.message ||
-          error.toString();
-      }
-      return thunkAPI.rejectWithValue(message);
-    }
+    return await handleAPICall(formData, authService.register, thunkAPI);
   }
 );
 
