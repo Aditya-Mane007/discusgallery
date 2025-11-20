@@ -14,10 +14,9 @@ export async function middleware(request) {
 
   if (publicRoutes.includes(pathname) && token && csrfToken) {
     return NextResponse.redirect(new URL("/", request.url));
-  } else if (!publicRoutes.includes(pathname) && !token && !csrfToken) {
+  } else if (!publicRoutes.includes(pathname) && (!token || !csrfToken)) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
-
   return NextResponse.next();
 }
 

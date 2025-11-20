@@ -25,13 +25,17 @@ export const handleAPICall = async (formData, callback, thunkAPI) => {
     const encryptedData = {
       request: encryptPayload(JSON.stringify(formData)),
     };
-    const res = await callback(encryptedData);
+
+    const res = formData ? await callback(encryptedData) : await callback();
+
     const decryptedData = decryptPayload(res?.data?.response);
+
     return JSON.parse(decryptedData);
   } catch (error) {
     const errorData = JSON.parse(
       decryptPayload(error?.response?.data?.response)
     );
+
     const message = errorData?.message || errorData.toString();
 
     return thunkAPI.rejectWithValue(message);

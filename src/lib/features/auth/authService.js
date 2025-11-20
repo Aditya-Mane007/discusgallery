@@ -1,4 +1,4 @@
-import { encryptPayload, handleAPICall } from "@/lib/utils";
+import { AUTH_API } from "@/lib/API_URL";
 import axios from "axios";
 
 // const config = {
@@ -8,13 +8,9 @@ import axios from "axios";
 // };
 
 const login = async (formData) => {
-  const res = await axios.post(
-    process.env.NEXT_PUBLIC_API_URL + "/auth/login",
-    formData,
-    {
-      withCredentials: true,
-    }
-  );
+  const res = await axios.post(AUTH_API + "/auth/login", formData, {
+    withCredentials: true,
+  });
 
   return res;
 };
@@ -31,6 +27,28 @@ const register = async (formData) => {
   return res;
 };
 
-const authService = { login, register };
+const logout = async () => {
+  const res = await axios.get(
+    process.env.NEXT_PUBLIC_API_URL + "/auth/logout",
+    {
+      withCredentials: true,
+    }
+  );
+
+  return res;
+};
+
+const getUser = async () => {
+  const res = await axios.get(
+    process.env.NEXT_PUBLIC_API_URL + "/auth/getUser",
+    {
+      withCredentials: true,
+    }
+  );
+
+  return res;
+};
+
+const authService = { login, register, logout, getUser };
 
 export default authService;
