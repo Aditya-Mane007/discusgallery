@@ -15,7 +15,10 @@ function Logout() {
   );
 
   useEffect(() => {
-    if (actionType === "logout" && isSuccess) {
+    if (actionType !== "logout") {
+      return;
+    }
+    if (isSuccess) {
       toast.success(message);
       setTimeout(() => {
         router.push("/login");

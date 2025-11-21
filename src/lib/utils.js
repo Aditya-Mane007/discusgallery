@@ -28,9 +28,12 @@ export const handleAPICall = async (formData, callback, thunkAPI) => {
 
     const res = formData ? await callback(encryptedData) : await callback();
 
-    const decryptedData = decryptPayload(res?.data?.response);
-
-    return JSON.parse(decryptedData);
+    try {
+      const decryptedData = decryptPayload(res?.data?.response);
+      return JSON.parse(decryptedData);
+    } catch (error) {
+      throw new Error("Error : Facing issue while decrypting response");
+    }
   } catch (error) {
     const errorData = JSON.parse(
       decryptPayload(error?.response?.data?.response)

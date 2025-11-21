@@ -12,36 +12,35 @@ export const AuthGuard = ({ children }) => {
     (state) => state.auth
   );
 
-  // console.log("Success : ", isSuccess);
-  // console.log("isLoading : ", isLoading);
-  // console.log("isError : ", isError);
-  // console.log("message : ", message);
+  useEffect(() => {
+    dispatch(getUser());
+  }, []);
 
   useEffect(() => {
-    if (!isSuccess && !isLoading && !isError && !message) {
-      dispatch(getUser());
-    }
-
     if (isSuccess) {
       return;
     }
 
     if (isError) {
-      toast.error(message || "Error : Unbale to verify user identiy");
+      toast.error("Error : Unbale to verify user identiy", {
+        duration: 1000,
+      });
 
       setTimeout(() => {
-        toast.error(`You will be redirect to login screen in`);
-      }, 500);
+        toast.error(`You will be redirect to login screen in`, {
+          duration: 2000,
+        });
+      }, 1000);
 
       setTimeout(() => {
         router.push("/login");
-      }, 1000);
+      }, 2000);
     }
 
     return () => {
       dispatch(reset());
     };
-  }, []);
+  }, [isSuccess, isLoading, isError, message]);
 
   return <>{children}</>;
 };
