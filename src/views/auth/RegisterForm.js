@@ -91,11 +91,11 @@ function RegisterForm() {
     }
     if (isSuccess) {
       toast.success(message || "Success : Registered Succesfully");
-      router.push("/");
+      router.push("/verify");
     }
-    return () => {
-      dispatch(reset());
-    };
+    // return () => {
+    //   dispatch(reset());
+    // };
   }, [isSuccess, isError, message]);
   return (
     <>

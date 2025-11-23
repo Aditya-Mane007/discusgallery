@@ -33,6 +33,21 @@ export const getUser = createAsyncThunk("auth/getUser", async (_, thunkAPI) => {
   return await handleAPICall(_, authService.getUser, thunkAPI);
 });
 
+export const generateOTP = createAsyncThunk(
+  "auth/generateOTP",
+  async (_, thunkAPI) => {
+    return await handleAPICall(_, authService.generateOTP, thunkAPI);
+  }
+);
+
+export const verifyOTP = createAsyncThunk(
+  "auth/verifyOTP",
+  async (formData, thunkAPI) => {
+    console.log("AUTH SLICE FORM DATA : ", formData);
+    return await handleAPICall(formData, authService.verifyOTP, thunkAPI);
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -110,6 +125,41 @@ const authSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
         state.actionType = "getUser";
+      })
+      .addCase(generateOTP.pending, (state) => {
+        state.isLoading = true;
+        state.actionType = "generateOTP";
+      })
+      .addCase(generateOTP.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.message = action.payload.message;
+        state.actionType = "generateOTP";
+        state.user = action.payload.data;
+      })
+      .addCase(generateOTP.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.message = action.payload;
+        state.actionType = "generateOTP";
+      })
+      .addCase(verifyOTP.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(verifyOTP.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.message = action.payload.message;
+        state.actionType = "verifyOTP";
+        state.user = action.payload.data;
+      })
+      .addCase(verifyOTP.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.message = action.payload;
+        state.actionType = "verifyOTP";
       });
   },
 });

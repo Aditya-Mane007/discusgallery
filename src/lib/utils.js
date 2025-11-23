@@ -21,6 +21,7 @@ export const decryptPayload = (payload) => {
 };
 
 export const handleAPICall = async (formData, callback, thunkAPI) => {
+  console.log("HANDLE API CALL FORM DATA : ", formData);
   try {
     const encryptedData = {
       request: encryptPayload(JSON.stringify(formData)),
@@ -30,6 +31,8 @@ export const handleAPICall = async (formData, callback, thunkAPI) => {
 
     try {
       const decryptedData = decryptPayload(res?.data?.response);
+
+      console.log("DECRYPTED DATA : ", decryptedData);
       return JSON.parse(decryptedData);
     } catch (error) {
       throw new Error("Error : Facing issue while decrypting response");

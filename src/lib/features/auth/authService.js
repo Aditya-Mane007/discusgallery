@@ -49,6 +49,36 @@ const getUser = async () => {
   return res;
 };
 
-const authService = { login, register, logout, getUser };
+const generateOTP = async () => {
+  const res = await axios.get(
+    process.env.NEXT_PUBLIC_API_URL + "/auth/generateOTP",
+    {
+      withCredentials: true,
+    }
+  );
+
+  return res;
+};
+
+const verifyOTP = async (formData) => {
+  const res = await axios.post(
+    process.env.NEXT_PUBLIC_API_URL + "/auth/verifyOTP",
+    formData,
+    {
+      withCredentials: true,
+    }
+  );
+
+  return res;
+};
+
+const authService = {
+  login,
+  register,
+  logout,
+  getUser,
+  generateOTP,
+  verifyOTP,
+};
 
 export default authService;
