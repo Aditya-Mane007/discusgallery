@@ -37,7 +37,7 @@ function Logout() {
     <Button
       className="cursor-pointer"
       onClick={() => {
-        console.log("Logout log");
+
         dispatch(logout());
       }}
     >

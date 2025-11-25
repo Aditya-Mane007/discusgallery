@@ -86,7 +86,6 @@ export function OTPForm({ ...props }) {
     },
   });
 
-  console.log("FORMDATA : ", isLoading);
   const onSubmit = (values) => {
     dispatch(verifyOTP(values));
   };
@@ -134,7 +133,13 @@ export function OTPForm({ ...props }) {
                   className="w-full cursor-pointer "
                   disabled={isLoading}
                 >
-                  {isLoading ? <Loader className="animate-spin" /> : "Verify"}
+                  {isLoading && actionType === "verifyOTP" ? (
+                    <>
+                      <Loader className="animate-spin" /> Verifying
+                    </>
+                  ) : (
+                    "Verify"
+                  )}
                 </Button>
               </form>
             </Form>
@@ -171,9 +176,14 @@ export function OTPForm({ ...props }) {
                   }}
                   disabled={isLoading}
                 >
-                  {isLoading
-                    ? "Sending Verification Email"
-                    : "Send Verification Email"}
+                  {isLoading && actionType == "generateOTP" ? (
+                    <>
+                      <Loader className="animate-spin" /> Sending Verification
+                      Email
+                    </>
+                  ) : (
+                    "Send Verification Email"
+                  )}
                 </Button>
               </TooltipTrigger>
               {user?.otp_attempts === 0 && (

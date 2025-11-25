@@ -43,7 +43,7 @@ export const generateOTP = createAsyncThunk(
 export const verifyOTP = createAsyncThunk(
   "auth/verifyOTP",
   async (formData, thunkAPI) => {
-    console.log("AUTH SLICE FORM DATA : ", formData);
+    
     return await handleAPICall(formData, authService.verifyOTP, thunkAPI);
   }
 );
@@ -146,6 +146,7 @@ const authSlice = createSlice({
       })
       .addCase(verifyOTP.pending, (state) => {
         state.isLoading = true;
+        state.actionType = "verifyOTP";
       })
       .addCase(verifyOTP.fulfilled, (state, action) => {
         state.isLoading = false;
