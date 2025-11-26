@@ -43,7 +43,6 @@ export const generateOTP = createAsyncThunk(
 export const verifyOTP = createAsyncThunk(
   "auth/verifyOTP",
   async (formData, thunkAPI) => {
-    
     return await handleAPICall(formData, authService.verifyOTP, thunkAPI);
   }
 );
@@ -57,6 +56,7 @@ const authSlice = createSlice({
       state.isError = false;
       state.isLoading = false;
       state.message = "";
+      state.actionType = "";
     },
   },
   extraReducers: (builder) => {

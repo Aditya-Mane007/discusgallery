@@ -29,15 +29,14 @@ function Logout() {
       toast.error(message);
     }
 
-    // return () => {
-    //   dispatch(reset());
-    // };
+    return () => {
+      dispatch(reset());
+    };
   }, [isSuccess, message, isError, isLoading]);
   return (
     <Button
       className="cursor-pointer"
       onClick={() => {
-
         dispatch(logout());
       }}
     >

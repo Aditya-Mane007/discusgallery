@@ -82,12 +82,14 @@ function LoginForm() {
 
     if (isSuccess) {
       toast.success(message || "Success : Login Succesfull");
-      router.push("/");
+      setTimeout(() => {
+        router.push("/");
+      }, 500);
     }
 
-    // return () => {
-    //   dispatch(reset());
-    // };
+    return () => {
+      dispatch(reset());
+    };
   }, [isSuccess, isError, message]);
 
   return (
