@@ -20,33 +20,34 @@ export const AuthGuard = ({ children }) => {
     if (pathname.startsWith("/verify") && user?.verified) {
       router.push("/");
     }
-    if (actionType === "getUser") {
-      if (isSuccess) {
-        dispatch(reset());
-        return;
-      }
-
-      if (isError) {
-        toast.error("Error : Unbale to verify user identiy", {
-          duration: 1000,
-        });
-
-        setTimeout(() => {
-          toast.error(`You will be redirect to login screen in`, {
-            duration: 2000,
-          });
-        }, 1000);
-
-        setTimeout(() => {
-          router.push("/login");
-        }, 2000);
-        dispatch(reset());
-      }
+    if (actionType !== "getUser") {
+      return;
+    }
+    if (isSuccess) {
+      dispatch(reset());
+      return;
     }
 
-    // return () => {
-    //   dispatch(reset());
-    // };
+    if (isError) {
+      toast.error("Error : Unbale to verify user identiy", {
+        duration: 1000,
+      });
+
+      setTimeout(() => {
+        toast.error(`You will be redirect to login screen in`, {
+          duration: 2000,
+        });
+      }, 1000);
+
+      setTimeout(() => {
+        router.push("/login");
+      }, 2000);
+      dispatch(reset());
+    }
+
+    return () => {
+      dispatch(reset());
+    };
   }, [isSuccess, isLoading, isError, message]);
 
   return <>{children}</>;

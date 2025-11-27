@@ -35,9 +35,10 @@ import { act, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { Loader } from "lucide-react";
+
 import { useRouter } from "next/navigation";
 import LoadingScreen from "@/views/utils/LoadingScreen";
+import { Loader } from "lucide-react";
 
 const formSchema = z.object({
   otp: z
@@ -57,30 +58,30 @@ export function OTPForm({ ...props }) {
   const { isSuccess, isError, isLoading, message, actionType, user } =
     useSelector((state) => state.auth);
 
-  console.log(user);
-
   useEffect(() => {
-    if (actionType === "generateOTP" || actionType === "verifyOTP") {
-      if (isSuccess) {
-        toast.success(message);
-
-        if (actionType === "generateOTP") {
-          setVerifyHandle(true);
-        }
-        if (actionType === "verifyOTP") {
-          router.push("/");
-        }
-      }
-
-      if (isError) {
-        toast.error(message);
-      }
-
-      return () => {
-        dispatch(reset());
-      };
+    if (actionType !== "generateOTP" && actionType !== "verifyOTP") {
+      return;
     }
-  }, [isSuccess, isError, isLoading, message]);
+
+    if (isSuccess) {
+      toast.success(message);
+
+      if (actionType === "generateOTP") {
+        setVerifyHandle(true);
+      }
+      if (actionType === "verifyOTP") {
+        router.push("/");
+      }
+    }
+
+    if (isError) {
+      toast.error(message);
+    }
+
+    return () => {
+      dispatch(reset());
+    };
+  }, [isSuccess, isError, message, dispatch, actionType, isLoading, user]);
 
   const form = useForm({
     resolver: zodResolver(formSchema),

@@ -36,6 +36,7 @@ import { login, reset } from "@/lib/features/auth/authSlice";
 import toast from "react-hot-toast";
 import Loading from "@/app/(public)/(auth)/loading";
 import { useRouter } from "next/navigation";
+import LoadingScreen from "../utils/LoadingScreen";
 
 const formSchema = z.object({
   email: z
@@ -56,7 +57,7 @@ const formSchema = z.object({
 function LoginForm() {
   const dispatch = useDispatch();
   const router = useRouter();
-  const { isSuccess, isLoading, isError, message } = useSelector(
+  const { isSuccess, isLoading, isError, message, actionType } = useSelector(
     (state) => state.auth
   );
   const [showPassword, setShowPassword] = useState(false);
@@ -74,6 +75,9 @@ function LoginForm() {
   }
 
   useEffect(() => {
+    if (actionType !== "login") {
+      return;
+    }
     if (isError) {
       toast.error(
         message || "Error : Unbale to login, please try after sometime"
@@ -90,7 +94,7 @@ function LoginForm() {
     return () => {
       dispatch(reset());
     };
-  }, [isSuccess, isError, message]);
+  }, [isSuccess, isLoading, isError, message, actionType]);
 
   return (
     <>
@@ -182,6 +186,9 @@ function LoginForm() {
           </CardFooter>
         </Card>
       </div>
+      {isLoading && actionType === "login" && (
+        <LoadingScreen message="Loading..." />
+      )}
     </>
   );
 }
