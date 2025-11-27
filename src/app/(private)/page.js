@@ -2,7 +2,6 @@ import Logout from "@/views/auth/Logout";
 import Image from "next/image";
 
 export default async function Home() {
-  await new Promise((resolve) => setTimeout(resolve, 5000));
   return (
     <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
       <nav className="w-full flex justify-end ">
