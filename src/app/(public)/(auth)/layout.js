@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Kavoon } from "next/font/google";
 import StoreProvider from "@/lib/StoreProvider";
 import "@/app/globals.css";
 import { Toaster } from "react-hot-toast";
@@ -9,6 +9,12 @@ const geistSans = Geist({
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+export const kavoon = Kavoon({
+  variable: "--font-kavoon",
+  weight: ["400"],
   subsets: ["latin"],
 });
 

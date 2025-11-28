@@ -105,9 +105,7 @@ function RegisterForm() {
       <div className="w-full h-screen flex justify-center items-center">
         <Card className="w-full max-w-[90%] sm:max-w-md">
           <CardHeader>
-            <CardTitle className="text-[1.25rem]">
-              Join Discus Gallery Today!
-            </CardTitle>
+            <CardTitle>Join Discus Gallery Today!</CardTitle>
           </CardHeader>
           <CardContent>
             <Form {...form}>
