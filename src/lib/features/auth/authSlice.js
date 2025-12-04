@@ -43,7 +43,6 @@ export const generateOTP = createAsyncThunk(
 export const verifyOTP = createAsyncThunk(
   "auth/verifyOTP",
   async (formData, thunkAPI) => {
-    
     return await handleAPICall(formData, authService.verifyOTP, thunkAPI);
   }
 );
@@ -57,12 +56,14 @@ const authSlice = createSlice({
       state.isError = false;
       state.isLoading = false;
       state.message = "";
+      state.actionType = "";
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(login.pending, (state) => {
         state.isLoading = true;
+        state.actionType = "login";
       })
       .addCase(login.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -79,6 +80,7 @@ const authSlice = createSlice({
       })
       .addCase(register.pending, (state) => {
         state.isLoading = true;
+        state.actionType = "register";
       })
       .addCase(register.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -95,11 +97,13 @@ const authSlice = createSlice({
       })
       .addCase(logout.pending, (state) => {
         state.isLoading = true;
+        state.actionType = "logout";
       })
       .addCase(logout.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.message = action.payload.message;
+        state.user = "";
         state.actionType = "logout";
       })
       .addCase(logout.rejected, (state, action) => {
@@ -111,6 +115,7 @@ const authSlice = createSlice({
       })
       .addCase(getUser.pending, (state) => {
         state.isLoading = true;
+        state.actionType = "getUser";
       })
       .addCase(getUser.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -135,7 +140,10 @@ const authSlice = createSlice({
         state.isSuccess = true;
         state.message = action.payload.message;
         state.actionType = "generateOTP";
-        state.user = action.payload.data;
+        state.user = {
+          ...state.user,
+          otp_attempts: action.payload.otp_attempts,
+        };
       })
       .addCase(generateOTP.rejected, (state, action) => {
         state.isLoading = false;
@@ -153,7 +161,6 @@ const authSlice = createSlice({
         state.isSuccess = true;
         state.message = action.payload.message;
         state.actionType = "verifyOTP";
-        state.user = action.payload.data;
       })
       .addCase(verifyOTP.rejected, (state, action) => {
         state.isLoading = false;

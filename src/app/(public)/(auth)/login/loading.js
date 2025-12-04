@@ -1,14 +1,9 @@
-import { Loader } from "lucide-react";
+import LoadingScreen from "@/views/utils/LoadingScreen";
+
 import React from "react";
 
 function loading() {
-  return (
-    <div className="w-full h-screen flex justify-center items-center">
-      <div className="flex">
-        <Loader className="animate-spin mr-2" /> Loading...
-      </div>
-    </div>
-  );
+  return <LoadingScreen />;
 }
 
 export default loading;

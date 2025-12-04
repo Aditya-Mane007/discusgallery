@@ -1,3 +1,9 @@
-export default function loading() {
-  return <p>Loading...1 2 3</p>;
+import LoadingScreen from "@/views/utils/LoadingScreen";
+
+import React from "react";
+
+function loading() {
+  return <LoadingScreen />;
 }
+
+export default loading;

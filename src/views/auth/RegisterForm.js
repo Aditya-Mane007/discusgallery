@@ -34,8 +34,8 @@ import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { register, reset } from "@/lib/features/auth/authSlice";
 import toast from "react-hot-toast";
-import Loading from "@/app/(public)/(auth)/loading";
 import { useRouter } from "next/navigation";
+import LoadingScreen from "../utils/LoadingScreen";
 
 const formSchema = z.object({
   name: z
@@ -65,7 +65,7 @@ const formSchema = z.object({
 function RegisterForm() {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { isSuccess, isLoading, isError, message } = useSelector(
+  const { isSuccess, isLoading, isError, message, actionType } = useSelector(
     (state) => state.auth
   );
   const [showPassword, setShowPassword] = useState(false);
@@ -84,6 +84,9 @@ function RegisterForm() {
   }
 
   useEffect(() => {
+    if (actionType !== "register") {
+      return;
+    }
     if (isError) {
       toast.error(
         message || "Error : Unbale to register, please try after sometime"
@@ -93,18 +96,16 @@ function RegisterForm() {
       toast.success(message || "Success : Registered Succesfully");
       router.push("/verify");
     }
-    // return () => {
-    //   dispatch(reset());
-    // };
-  }, [isSuccess, isError, message]);
+    return () => {
+      dispatch(reset());
+    };
+  }, [isSuccess, isLoading, isError, message, actionType]);
   return (
     <>
       <div className="w-full h-screen flex justify-center items-center">
         <Card className="w-full max-w-[90%] sm:max-w-md">
           <CardHeader>
-            <CardTitle className="text-[1.25rem]">
-              Join Discus Gallery Today!
-            </CardTitle>
+            <CardTitle>Join Discus Gallery Today!</CardTitle>
           </CardHeader>
           <CardContent>
             <Form {...form}>
@@ -200,6 +201,9 @@ function RegisterForm() {
           </CardFooter>
         </Card>
       </div>
+      {isLoading && actionType === "register" && (
+        <LoadingScreen message="Loading..." />
+      )}
     </>
   );
 }

@@ -1,8 +1,13 @@
 import React from "react";
+import LoadingScreen from "@/views/utils/LoadingScreen";
 
 async function Dashboard() {
-  await new Promise((resolve) => setTimeout(resolve, 5000));
-  return <div>Dashboard</div>;
+  return (
+    <>
+      <div>Dashboard</div>
+      <LoadingScreen />
+    </>
+  );
 }
 
 export default Dashboard;

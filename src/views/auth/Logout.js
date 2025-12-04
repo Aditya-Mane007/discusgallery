@@ -5,6 +5,7 @@ import { logout, reset } from "@/lib/features/auth/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import LoadingScreen from "../utils/LoadingScreen";
 
 function Logout() {
   const dispatch = useDispatch();
@@ -29,20 +30,24 @@ function Logout() {
       toast.error(message);
     }
 
-    // return () => {
-    //   dispatch(reset());
-    // };
-  }, [isSuccess, message, isError, isLoading]);
+    return () => {
+      dispatch(reset());
+    };
+  }, [isSuccess, message, isError, isLoading, actionType]);
   return (
-    <Button
-      className="cursor-pointer"
-      onClick={() => {
-
-        dispatch(logout());
-      }}
-    >
-      Logout
-    </Button>
+    <>
+      <Button
+        className="cursor-pointer"
+        onClick={() => {
+          dispatch(logout());
+        }}
+      >
+        Logout
+      </Button>
+      {isLoading && actionType === "logout" && (
+        <LoadingScreen message="Logging out." />
+      )}
+    </>
   );
 }
 
